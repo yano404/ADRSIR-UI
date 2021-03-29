@@ -11,11 +11,10 @@ import { useFormik } from 'formik';
 import React from 'react';
 import * as yup from 'yup';
 import API from "../../api";
-import AddButton from '../atoms/AddButton';
-import AddCodeButton from "../atoms/AddCodeButton";
-import CloseButton from '../atoms/CloseIconButton';
-import AlertSnackbar from '../molecules/AlertSnackbar';
-import CodeField from '../molecules/CodeField';
+import AddButton from '../button/AddButton';
+import AddDeviceButton from "../button/AddDeviceButton";
+import CloseButton from '../button/CloseIconButton';
+import AlertSnackbar from '../snackbar/AlertSnackbar';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function AddCodeDialog({ device, changed }) {
+export default function AddDeviceDialog({ group, changed }) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [snackOpen, setSnackOpen] = React.useState(false);
@@ -38,42 +37,36 @@ export default function AddCodeDialog({ device, changed }) {
     const [snackMessage, setSnackMessage] = React.useState("");
     const [alertSeverity, setAlertSeverity] = React.useState("error");
 
-    const validCode = yup.object({
+    const validDevice = yup.object({
         name: yup
-            .string("Enter code name")
+            .string("Enter device name")
             .trim()
-            .required("Name is required"),
-        code: yup
-            .string("Enter code")
-            .matches(/^[0-9A-Fa-f]+$/, "Code is incorrect")
-            .required("Code is required"),
+            .required("device name is required"),
         desc: yup
             .string("Enter description")
     });
     const formik = useFormik({
         initialValues: {
             name: "",
-            code: "",
             desc: "",
         },
-        validationSchema: validCode,
-        onSubmit: createCode
+        validationSchema: validDevice,
+        onSubmit: createDevice
     })
 
-    async function createCode(values) {
+    async function createDevice(values) {
         await API.post(
-            "/codes/",
+            "/devices/",
             {
                 name: values.name,
-                code: values.code,
-                desc: values.desc,
-                device_id: device.id
+                group: group,
+                desc: values.desc
             }
         ).then(res => {
             console.log(res);
             changed();
             setSnackTitle(res.status);
-            setSnackMessage("the code is added");
+            setSnackMessage("the device is added");
             setAlertSeverity("success");
             handleSnackOpen();
             handleClose();
@@ -93,10 +86,8 @@ export default function AddCodeDialog({ device, changed }) {
     const handleClose = () => {
         setOpen(false);
         formik.setFieldValue("name", "");
-        formik.setFieldValue("code", "");
         formik.setFieldValue("desc", "");
         formik.setFieldTouched("name", false);
-        formik.setFieldTouched("code", false);
         formik.setFieldTouched("desc", false);
     }
 
@@ -111,29 +102,19 @@ export default function AddCodeDialog({ device, changed }) {
         setSnackOpen(false);
     }
 
-    const readMemory = async () => {
-        await API.get("/read/0")
-            .then(res => {
-                formik.setFieldValue("code", res.data.code)
-            })
-            .catch(error => {
-                console.log(error.response);
-            })
-    }
-
     return (
         <div>
-            <AddCodeButton onClick={handleOpen} />
+            <AddDeviceButton onClick={handleOpen} />
             <Dialog
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="add-code-dialog"
+                aria-labelledby="add-device-dialog"
                 maxWidth="md"
                 fullWidth
             >
-                <DialogTitle id="add-code-dialog" className={classes.root}>
+                <DialogTitle id="add-device-dialog" className={classes.root}>
                     <Typography variant="h6">
-                        Add Code
+                        Add Device
                     </Typography>
                     <CloseButton className={classes.closeButton} onClick={handleClose} />
                 </DialogTitle>
@@ -143,24 +124,12 @@ export default function AddCodeDialog({ device, changed }) {
                             fullWidth
                             id="name"
                             name="name"
-                            label="Name"
+                            label="Device name"
                             type="text"
                             value={formik.values.name}
                             onChange={formik.handleChange}
                             error={formik.touched.name && Boolean(formik.errors.name)}
                             helperText={formik.touched.name && formik.errors.name}
-                        />
-                        <CodeField
-                            fullWidth
-                            id="code"
-                            name="code"
-                            label="Code"
-                            type="text"
-                            value={formik.values.code}
-                            onChange={formik.handleChange}
-                            error={formik.touched.code && Boolean(formik.errors.code)}
-                            helperText={formik.touched.code && formik.errors.code}
-                            onClick={readMemory}
                         />
                         <TextField
                             fullWidth

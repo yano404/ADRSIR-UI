@@ -1,12 +1,14 @@
 import AppBar from '@material-ui/core/AppBar';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
+import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import { useHistory } from "react-router-dom";
 import { drawerWidth } from "../../config/uiconfig";
-import BrandButton from "../atoms/BrandButton";
-import SettingsButton from "../atoms/SettingsButton";
+import HomeButton from "../button/HomeButton";
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -21,18 +23,21 @@ const useStyles = makeStyles((theme) => ({
             display: 'none',
         },
     },
-    grow: {
-        flexGrow: 1,
-    },
+    icon: {
+        marginRight: theme.spacing(0.5),
+        width: 20,
+        height: 20,
+    }
 }));
 
-export default function NavBar({ title, menuOnClick }) {
+export default function NavBar({ menuOnClick }) {
     const classes = useStyles();
     const history = useHistory();
 
     return (
         <AppBar
             position="fixed"
+            color="default"
             className={classes.appBar}
         >
             <Toolbar>
@@ -45,12 +50,12 @@ export default function NavBar({ title, menuOnClick }) {
                 >
                     <MenuIcon />
                 </IconButton>
-                <BrandButton
-                    title={title}
-                    onClick={() => history.push("/")}
-                />
-                <div className={classes.grow} />
-                <SettingsButton onClick={() => history.push("/settings")} />
+                <Breadcrumbs separator={<NavigateNextIcon />}>
+                    <HomeButton onClick={() => history.push("/")} />
+                    <Typography variant="h6" noWrap>
+                        Settings
+                    </Typography>
+                </Breadcrumbs>
             </Toolbar>
         </AppBar>
     );

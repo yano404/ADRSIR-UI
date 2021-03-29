@@ -5,11 +5,11 @@ import Typography from '@material-ui/core/Typography';
 import clsx from "clsx";
 import React from "react";
 import API from "../../api";
-import ExpandMoreIconButton from "../atoms/ExpandMoreIconButton";
-import AddCodeDialog from "../organisms/AddCodeDialog";
-import DeleteDeviceDialog from "../organisms/DeleteDeviceDialog";
-import EditDeviceDialog from "../organisms/EditDeviceDialog";
-import CodeTable from "./CodeTable";
+import ExpandMoreIconButton from "../button/ExpandMoreIconButton";
+import AddCodeDialog from "../dialog/AddCodeDialog";
+import DeleteDeviceDialog from "../dialog/DeleteDeviceDialog";
+import EditDeviceDialog from "../dialog/EditDeviceDialog";
+import CodeTable from "../table/CodeTable";
 
 const useStyles = makeStyles((theme) => ({
     root: {

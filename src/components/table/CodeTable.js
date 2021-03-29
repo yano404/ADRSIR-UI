@@ -8,8 +8,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import React from "react";
-import DeleteCodeDialog from "../organisms/DeleteCodeDialog";
-import EditCodeDialog from "../organisms/EditCodeDialog";
+import DeleteCodeDialog from "../dialog/DeleteCodeDialog";
+import EditCodeDialog from "../dialog/EditCodeDialog";
 
 const useStyles = makeStyles((theme) => ({
     tableHead: {

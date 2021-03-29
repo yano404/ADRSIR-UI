@@ -9,12 +9,12 @@ import React from 'react';
 import { useHistory } from "react-router-dom";
 import API from "../../api";
 import { drawerWidth } from "../../config/uiconfig";
-import Copyright from "../atoms/Copyright";
-import AddDeviceDialog from "../organisms/AddDeviceDialog";
-import AddGroupDialog from "../organisms/AddGroupDialog";
-import DeviceList from "../organisms/DeviceSettingsList";
-import DrawerItems from "../organisms/DrawerItems";
-import NavBar from "../organisms/SettingsNavBar";
+import Copyright from "../Copyright";
+import AddDeviceDialog from "../dialog/AddDeviceDialog";
+import AddGroupDialog from "../dialog/AddGroupDialog";
+import DeviceList from "../list/DeviceSettingsList";
+import DrawerItems from "../list/DrawerItems";
+import NavBar from "../navbar/SettingsNavBar";
 
 const useStyles = makeStyles((theme) => ({
     root: {

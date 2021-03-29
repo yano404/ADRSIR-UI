@@ -3,18 +3,24 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    MenuItem,
+    Select,
     TextField,
     Typography
 } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import InputLabel from '@material-ui/core/InputLabel';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
 import React from 'react';
 import * as yup from 'yup';
 import API from "../../api";
-import AddButton from '../atoms/AddButton';
-import AddDeviceButton from "../atoms/AddDeviceButton";
-import CloseButton from '../atoms/CloseIconButton';
-import AlertSnackbar from '../molecules/AlertSnackbar';
+import CloseButton from '../button/CloseIconButton';
+import EditIconButton from "../button/EditIconButton";
+import SubmitButton from '../button/SubmitButton';
+import AlertSnackbar from '../snackbar/AlertSnackbar';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,10 +32,15 @@ const useStyles = makeStyles((theme) => ({
         right: theme.spacing(1),
         top: theme.spacing(1),
         color: theme.palette.grey[500]
+    },
+    formControl: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+        minWidth: 240
     }
 }));
 
-export default function AddDeviceDialog({ group, changed }) {
+export default function EditDeviceDialog({ device, changed, groups }) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [snackOpen, setSnackOpen] = React.useState(false);
@@ -42,33 +53,33 @@ export default function AddDeviceDialog({ group, changed }) {
             .string("Enter device name")
             .trim()
             .required("device name is required"),
+        group: yup
+            .string("Choose a group")
+            .required(),
         desc: yup
             .string("Enter description")
     });
     const formik = useFormik({
         initialValues: {
-            name: "",
-            desc: "",
+            name: device.name,
+            group: device.desc,
+            desc: device.desc,
         },
         validationSchema: validDevice,
-        onSubmit: createDevice
+        onSubmit: updateDevice
     })
 
-    async function createDevice(values) {
-        await API.post(
-            "/devices/",
+    async function updateDevice(values) {
+        await API.put(
+            `/devices/${device.id}`,
             {
                 name: values.name,
-                group: group,
+                group: values.group,
                 desc: values.desc
             }
         ).then(res => {
             console.log(res);
             changed();
-            setSnackTitle(res.status);
-            setSnackMessage("the device is added");
-            setAlertSeverity("success");
-            handleSnackOpen();
             handleClose();
         }).catch(error => {
             console.log(error.response);
@@ -81,14 +92,16 @@ export default function AddDeviceDialog({ group, changed }) {
 
     const handleOpen = () => {
         setOpen(true);
+        formik.setFieldValue("name", device.name);
+        formik.setFieldValue("group", device.group);
+        formik.setFieldValue("desc", device.desc);
+        formik.setFieldTouched("name", false);
+        formik.setFieldTouched("group", false);
+        formik.setFieldTouched("desc", false);
     }
 
     const handleClose = () => {
         setOpen(false);
-        formik.setFieldValue("name", "");
-        formik.setFieldValue("desc", "");
-        formik.setFieldTouched("name", false);
-        formik.setFieldTouched("desc", false);
     }
 
     const handleSnackOpen = () => {
@@ -104,17 +117,17 @@ export default function AddDeviceDialog({ group, changed }) {
 
     return (
         <div>
-            <AddDeviceButton onClick={handleOpen} />
+            <EditIconButton onClick={handleOpen} />
             <Dialog
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="add-device-dialog"
+                aria-labelledby="edit-device-dialog"
                 maxWidth="md"
                 fullWidth
             >
-                <DialogTitle id="add-device-dialog" className={classes.root}>
+                <DialogTitle id="edit-device-dialog" className={classes.root}>
                     <Typography variant="h6">
-                        Add Device
+                        Edit Device
                     </Typography>
                     <CloseButton className={classes.closeButton} onClick={handleClose} />
                 </DialogTitle>
@@ -131,6 +144,26 @@ export default function AddDeviceDialog({ group, changed }) {
                             error={formik.touched.name && Boolean(formik.errors.name)}
                             helperText={formik.touched.name && formik.errors.name}
                         />
+                        <FormControl className={classes.formControl}>
+                            <InputLabel id="select-group-label">
+                                Select Group
+                            </InputLabel>
+                            <Select
+                                labelId="select-group-label"
+                                id="group"
+                                name="group"
+                                value={formik.values.group}
+                                onChange={formik.handleChange}
+                                error={formik.touched.group && Boolean(formik.errors.group)}
+                            >
+                                {groups.map((group_name, index) => (
+                                    <MenuItem value={group_name} key={`group-select-${index}`}>
+                                        {group_name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            <FormHelperText>{formik.touched.group && formik.errors.group}</FormHelperText>
+                        </FormControl>
                         <TextField
                             fullWidth
                             id="desc"
@@ -143,7 +176,7 @@ export default function AddDeviceDialog({ group, changed }) {
                             helperText={formik.touched.desc && formik.errors.desc}
                         />
                         <DialogActions>
-                            <AddButton variant="contained" type="submit" />
+                            <SubmitButton variant="contained" type="submit" />
                         </DialogActions>
                     </form>
                 </DialogContent>

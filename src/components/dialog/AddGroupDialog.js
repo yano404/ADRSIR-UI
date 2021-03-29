@@ -10,9 +10,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
 import React from 'react';
 import * as yup from 'yup';
-import AddButton from '../atoms/AddButton';
-import AddGroupButton from "../atoms/AddGroupButton";
-import CloseButton from '../atoms/CloseIconButton';
+import AddButton from '../button/AddButton';
+import AddGroupButton from "../button/AddGroupButton";
+import CloseButton from '../button/CloseIconButton';
 
 const useStyles = makeStyles((theme) => ({
     root: {

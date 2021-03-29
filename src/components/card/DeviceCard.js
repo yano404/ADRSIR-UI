@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, Divider } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core/styles';
-import ButtonIR from "../atoms/ButtonIR";
+import ButtonIR from "../button/ButtonIR";
 
 const useStyles = makeStyles((theme) => ({
     root: {

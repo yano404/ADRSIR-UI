@@ -3,24 +3,19 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    MenuItem,
-    Select,
     TextField,
     Typography
 } from '@material-ui/core';
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import InputLabel from '@material-ui/core/InputLabel';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
 import React from 'react';
 import * as yup from 'yup';
 import API from "../../api";
-import CloseButton from '../atoms/CloseIconButton';
-import EditIconButton from "../atoms/EditIconButton";
-import SubmitButton from '../atoms/SubmitButton';
-import AlertSnackbar from '../molecules/AlertSnackbar';
-
+import AddButton from '../button/AddButton';
+import AddCodeButton from "../button/AddCodeButton";
+import CloseButton from '../button/CloseIconButton';
+import CodeField from '../inputfield/CodeField';
+import AlertSnackbar from '../snackbar/AlertSnackbar';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,15 +27,10 @@ const useStyles = makeStyles((theme) => ({
         right: theme.spacing(1),
         top: theme.spacing(1),
         color: theme.palette.grey[500]
-    },
-    formControl: {
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-        minWidth: 240
     }
 }));
 
-export default function EditDeviceDialog({ device, changed, groups }) {
+export default function AddCodeDialog({ device, changed }) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [snackOpen, setSnackOpen] = React.useState(false);
@@ -48,38 +38,44 @@ export default function EditDeviceDialog({ device, changed, groups }) {
     const [snackMessage, setSnackMessage] = React.useState("");
     const [alertSeverity, setAlertSeverity] = React.useState("error");
 
-    const validDevice = yup.object({
+    const validCode = yup.object({
         name: yup
-            .string("Enter device name")
+            .string("Enter code name")
             .trim()
-            .required("device name is required"),
-        group: yup
-            .string("Choose a group")
-            .required(),
+            .required("Name is required"),
+        code: yup
+            .string("Enter code")
+            .matches(/^[0-9A-Fa-f]+$/, "Code is incorrect")
+            .required("Code is required"),
         desc: yup
             .string("Enter description")
     });
     const formik = useFormik({
         initialValues: {
-            name: device.name,
-            group: device.desc,
-            desc: device.desc,
+            name: "",
+            code: "",
+            desc: "",
         },
-        validationSchema: validDevice,
-        onSubmit: updateDevice
+        validationSchema: validCode,
+        onSubmit: createCode
     })
 
-    async function updateDevice(values) {
-        await API.put(
-            `/devices/${device.id}`,
+    async function createCode(values) {
+        await API.post(
+            "/codes/",
             {
                 name: values.name,
-                group: values.group,
-                desc: values.desc
+                code: values.code,
+                desc: values.desc,
+                device_id: device.id
             }
         ).then(res => {
             console.log(res);
             changed();
+            setSnackTitle(res.status);
+            setSnackMessage("the code is added");
+            setAlertSeverity("success");
+            handleSnackOpen();
             handleClose();
         }).catch(error => {
             console.log(error.response);
@@ -92,16 +88,16 @@ export default function EditDeviceDialog({ device, changed, groups }) {
 
     const handleOpen = () => {
         setOpen(true);
-        formik.setFieldValue("name", device.name);
-        formik.setFieldValue("group", device.group);
-        formik.setFieldValue("desc", device.desc);
-        formik.setFieldTouched("name", false);
-        formik.setFieldTouched("group", false);
-        formik.setFieldTouched("desc", false);
     }
 
     const handleClose = () => {
         setOpen(false);
+        formik.setFieldValue("name", "");
+        formik.setFieldValue("code", "");
+        formik.setFieldValue("desc", "");
+        formik.setFieldTouched("name", false);
+        formik.setFieldTouched("code", false);
+        formik.setFieldTouched("desc", false);
     }
 
     const handleSnackOpen = () => {
@@ -115,19 +111,29 @@ export default function EditDeviceDialog({ device, changed, groups }) {
         setSnackOpen(false);
     }
 
+    const readMemory = async () => {
+        await API.get("/read/0")
+            .then(res => {
+                formik.setFieldValue("code", res.data.code)
+            })
+            .catch(error => {
+                console.log(error.response);
+            })
+    }
+
     return (
         <div>
-            <EditIconButton onClick={handleOpen} />
+            <AddCodeButton onClick={handleOpen} />
             <Dialog
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="edit-device-dialog"
+                aria-labelledby="add-code-dialog"
                 maxWidth="md"
                 fullWidth
             >
-                <DialogTitle id="edit-device-dialog" className={classes.root}>
+                <DialogTitle id="add-code-dialog" className={classes.root}>
                     <Typography variant="h6">
-                        Edit Device
+                        Add Code
                     </Typography>
                     <CloseButton className={classes.closeButton} onClick={handleClose} />
                 </DialogTitle>
@@ -137,33 +143,25 @@ export default function EditDeviceDialog({ device, changed, groups }) {
                             fullWidth
                             id="name"
                             name="name"
-                            label="Device name"
+                            label="Name"
                             type="text"
                             value={formik.values.name}
                             onChange={formik.handleChange}
                             error={formik.touched.name && Boolean(formik.errors.name)}
                             helperText={formik.touched.name && formik.errors.name}
                         />
-                        <FormControl className={classes.formControl}>
-                            <InputLabel id="select-group-label">
-                                Select Group
-                            </InputLabel>
-                            <Select
-                                labelId="select-group-label"
-                                id="group"
-                                name="group"
-                                value={formik.values.group}
-                                onChange={formik.handleChange}
-                                error={formik.touched.group && Boolean(formik.errors.group)}
-                            >
-                                {groups.map((group_name, index) => (
-                                    <MenuItem value={group_name} key={`group-select-${index}`}>
-                                        {group_name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                            <FormHelperText>{formik.touched.group && formik.errors.group}</FormHelperText>
-                        </FormControl>
+                        <CodeField
+                            fullWidth
+                            id="code"
+                            name="code"
+                            label="Code"
+                            type="text"
+                            value={formik.values.code}
+                            onChange={formik.handleChange}
+                            error={formik.touched.code && Boolean(formik.errors.code)}
+                            helperText={formik.touched.code && formik.errors.code}
+                            onClick={readMemory}
+                        />
                         <TextField
                             fullWidth
                             id="desc"
@@ -176,7 +174,7 @@ export default function EditDeviceDialog({ device, changed, groups }) {
                             helperText={formik.touched.desc && formik.errors.desc}
                         />
                         <DialogActions>
-                            <SubmitButton variant="contained" type="submit" />
+                            <AddButton variant="contained" type="submit" />
                         </DialogActions>
                     </form>
                 </DialogContent>

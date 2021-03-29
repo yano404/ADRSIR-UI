@@ -11,11 +11,11 @@ import { useFormik } from 'formik';
 import React from 'react';
 import * as yup from 'yup';
 import API from "../../api";
-import CloseButton from '../atoms/CloseIconButton';
-import EditIconButton from "../atoms/EditIconButton";
-import SubmitButton from '../atoms/SubmitButton';
-import AlertSnackbar from '../molecules/AlertSnackbar';
-import CodeField from '../molecules/CodeField';
+import CloseButton from '../button/CloseIconButton';
+import EditIconButton from "../button/EditIconButton";
+import SubmitButton from '../button/SubmitButton';
+import CodeField from '../inputfield/CodeField';
+import AlertSnackbar from '../snackbar/AlertSnackbar';
 
 
 const useStyles = makeStyles((theme) => ({

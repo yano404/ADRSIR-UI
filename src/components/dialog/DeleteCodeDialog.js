@@ -8,11 +8,11 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import API from "../../api";
-import CancelButton from "../atoms/CancelButton";
-import CloseButton from '../atoms/CloseIconButton';
-import DeleteButon from "../atoms/DeleteButton";
-import DeleteIconButton from "../atoms/DeleteIconButton";
-import AlertSnackbar from '../molecules/AlertSnackbar';
+import CancelButton from "../button/CancelButton";
+import CloseButton from '../button/CloseIconButton';
+import DeleteButon from "../button/DeleteButton";
+import DeleteIconButton from "../button/DeleteIconButton";
+import AlertSnackbar from '../snackbar/AlertSnackbar';
 
 const useStyles = makeStyles((theme) => ({
     root: {

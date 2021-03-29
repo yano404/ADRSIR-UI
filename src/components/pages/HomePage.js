@@ -8,10 +8,10 @@ import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import API from "../../api";
 import { drawerWidth } from "../../config/uiconfig";
-import Copyright from "../atoms/Copyright";
-import DeviceList from "../organisms/DeviceList";
-import DrawerItems from "../organisms/DrawerItems";
-import NavBar from "../organisms/NavBar";
+import Copyright from "../Copyright";
+import DeviceList from "../list/DeviceList";
+import DrawerItems from "../list/DrawerItems";
+import NavBar from "../navbar/NavBar";
 
 const useStyles = makeStyles((theme) => ({
     root: {

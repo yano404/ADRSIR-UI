@@ -1,7 +1,7 @@
 import Grid from "@material-ui/core/Grid";
-import DeviceCard from "../molecules/DeviceCard";
+import DeviceCard from "../card/DeviceSettingsCard";
 
-export default function DeviceList({ devices }) {
+export default function DeviceList({ devices, groups, changed }) {
     return (
         <Grid
             container
@@ -12,7 +12,7 @@ export default function DeviceList({ devices }) {
             {
                 devices.map((device, id) => (
                     <Grid item key={`device-${id}`} xs={12} xl={6}>
-                        <DeviceCard device={device} />
+                        <DeviceCard device={device} changed={changed} groups={groups} />
                     </Grid>
                 ))
             }
