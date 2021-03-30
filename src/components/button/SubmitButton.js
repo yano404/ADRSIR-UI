@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SubmitButton(props) {
     const classes = useStyles();
-    const { variant, onClick, fullWidth, type, ...other } = props;
+    const { variant, onClick, fullWidth, type } = props;
 
     return (
         <Button
@@ -21,6 +21,7 @@ export default function SubmitButton(props) {
             className={classes.root}
             startIcon={<CheckIcon />}
             type={type}
+            fullWidth={fullWidth}
         >
             Submit
         </Button>

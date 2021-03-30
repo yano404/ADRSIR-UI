@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DeleteButton(props) {
     const classes = useStyles();
-    const { variant, onClick, fullWidth, type, ...other } = props;
+    const { variant, onClick, fullWidth, type } = props;
 
     return (
         <Button
@@ -21,6 +21,7 @@ export default function DeleteButton(props) {
             className={classes.root}
             startIcon={<DeleteIcon />}
             type={type}
+            fullWidth={fullWidth}
         >
             Delete
         </Button>

@@ -2,7 +2,7 @@ import { FormControl, FormHelperText, IconButton, Input, InputAdornment, InputLa
 import MemoryIcon from '@material-ui/icons/Memory';
 
 export default function CodeField(props) {
-    const { fullWidth, id, label, type, value, onChange, onClick, error, helperText, ...others } = props;
+    const { fullWidth, id, label, type, value, onChange, onClick, error, helperText } = props;
 
     return (
         <FormControl fullWidth>

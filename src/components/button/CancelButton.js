@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CancelButton(props) {
     const classes = useStyles();
-    const { variant, color, onClick, fullWidth, type, ...other } = props;
+    const { variant, color, onClick, fullWidth, type } = props;
 
     return (
         <Button
@@ -21,6 +21,7 @@ export default function CancelButton(props) {
             className={classes.root}
             startIcon={<CancelIcon />}
             type={type}
+            fullWidth={fullWidth}
         >
             Cancel
         </Button>
