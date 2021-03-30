@@ -6,7 +6,6 @@ import Hidden from '@material-ui/core/Hidden';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import { useHistory } from "react-router-dom";
 import API from "../../api";
 import { drawerWidth } from "../../config/uiconfig";
 import Copyright from "../Copyright";
@@ -48,7 +47,6 @@ function SettingsPage(props) {
     const { window } = props;
     const classes = useStyles();
     const theme = useTheme();
-    const history = useHistory();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [groups, setGroups] = React.useState([]);
     const [group, setGroup] = React.useState("");
