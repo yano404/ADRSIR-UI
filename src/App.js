@@ -2,7 +2,6 @@ import {
   BrowserRouter as Router,
   Route, Switch
 } from "react-router-dom";
-import './App.css';
 import HomePage from "./components/pages/HomePage";
 import SettingsPage from "./components/pages/SettingsPage";
 import { siteTitle } from "./config/uiconfig";
