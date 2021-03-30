@@ -1,4 +1,4 @@
-import { FormControl, IconButton, Input, InputAdornment, InputLabel } from "@material-ui/core";
+import { FormControl, FormHelperText, IconButton, Input, InputAdornment, InputLabel } from "@material-ui/core";
 import MemoryIcon from '@material-ui/icons/Memory';
 
 export default function CodeField(props) {
@@ -6,7 +6,7 @@ export default function CodeField(props) {
 
     return (
         <FormControl fullWidth>
-            <InputLabel htmlFor={id}>
+            <InputLabel htmlFor={id} error={error}>
                 {label}
             </InputLabel>
             <Input
@@ -26,7 +26,11 @@ export default function CodeField(props) {
                         </IconButton>
                     </InputAdornment>
                 }
+                aria-describedby={`${id}-helper-text`}
             />
+            <FormHelperText id={`${id}-helper-text`} error={error}>
+                {helperText}
+            </FormHelperText>
         </FormControl>
     );
 }
