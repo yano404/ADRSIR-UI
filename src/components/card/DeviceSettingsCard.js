@@ -33,21 +33,22 @@ export default function DeviceSettingsCard({ device, changed, groups }) {
     const [codes, setCodes] = React.useState([]);
     const [codeChanged, setCodeChanged] = React.useState(0);
 
-    React.useEffect(getCodes, [device, codeChanged]);
-
-    async function getCodes() {
-        await API.get(
-            `/devices/${device.id}/codes`
-        ).then(res => {
-            console.log(device.id);
-            console.log(device.name);
-            console.log(res);
-            const data = res.data;
-            setCodes(data);
-        }).catch(error => {
-            console.log(error.responce);
-        })
-    }
+    React.useEffect(() => {
+        const getCodes = async () => {
+            await API.get(
+                `/devices/${device.id}/codes`
+            ).then(res => {
+                console.log(device.id);
+                console.log(device.name);
+                console.log(res);
+                const data = res.data;
+                setCodes(data);
+            }).catch(error => {
+                console.log(error.responce);
+            })
+        };
+        getCodes();
+    }, [device, codeChanged]);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
