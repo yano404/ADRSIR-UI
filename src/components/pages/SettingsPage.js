@@ -58,9 +58,9 @@ function SettingsPage(props) {
             await API.get("/groups")
                 .then(res => {
                     const data = res.data;
-                    console.log(data.flat());
-                    setGroups(data.flat());
-                    setGroup(data[0][0]);
+                    console.log(data);
+                    setGroups(data);
+                    setGroup(data[0]);
                 })
                 .catch(error => {
                     console.log(error.response);

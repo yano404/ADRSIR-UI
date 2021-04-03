@@ -51,7 +51,7 @@ function HomePage(props) {
         const getGroups = async () => {
             await API.get("/groups")
                 .then(res => {
-                    const data = res.data.flat();
+                    const data = res.data;
                     console.log(data);
                     setGroups(data);
                     setGroup(data[0]);
