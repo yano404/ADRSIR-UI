@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, Divider } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from '@material-ui/core/styles';
+import { gridSize } from "../../config/uiconfig";
 import ButtonIR from "../button/ButtonIR";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,8 +34,8 @@ function ButtonIRGrid({ codes }) {
         },
     }));
     const classes = useStyles();
-    const grid_xs_size = codes.length > 3 ? 4 : true;
-    const grid_md_size = codes.length > 4 ? 3 : true;
+    const grid_xs_size = codes.length > 3 ? gridSize.xs : true;
+    const grid_md_size = codes.length > 4 ? gridSize.md : true;
 
     return (
         <div className={classes.root}>
