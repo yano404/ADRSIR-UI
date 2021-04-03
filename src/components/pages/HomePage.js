@@ -44,7 +44,7 @@ function HomePage(props) {
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [groups, setGroups] = React.useState([]);
-    const [group, setGroup] = React.useState("");
+    const [group, setGroup] = React.useState();
     const [devices, setDevices] = React.useState([]);
 
     React.useEffect(() => {
@@ -73,8 +73,10 @@ function HomePage(props) {
                 console.log(data);
                 setDevices(data);
             })
+        };
+        if (group !== undefined) {
+            getDevices()
         }
-        getDevices()
     }, [group])
 
     const handleDrawerToggle = () => {
