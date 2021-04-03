@@ -49,7 +49,7 @@ function SettingsPage(props) {
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const [groups, setGroups] = React.useState([]);
-    const [group, setGroup] = React.useState("");
+    const [group, setGroup] = React.useState();
     const [devices, setDevices] = React.useState([]);
     const [changed, setChanged] = React.useState(0);
 
@@ -79,8 +79,10 @@ function SettingsPage(props) {
                 console.log(data);
                 setDevices(data);
             })
+        };
+        if (group !== undefined) {
+            getDevices()
         }
-        getDevices()
     }, [group, changed])
 
     const handleDrawerToggle = () => {
