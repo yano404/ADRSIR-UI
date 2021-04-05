@@ -35,22 +35,23 @@ $ npm start
 ### Deploy with nginx
 1. Edit config files (`src/config/apiconfig.js` and `src/config/uiconfig.js`)
 ```js
-/*
-    src/config/apiconfig.js
-*/
+/* src/config/apiconfig.js */
 // API URL
 // Change API_URL to your environment.
 export const API_URL = "http://raspberrypi.local:8000"
 ```
 ```js
-/*
-    src/config/uiconfig.js
-*/
+/* src/config/uiconfig.js */
 // Site title
 // You can chenge the site title.
 export const siteTitle = "ADRSIR-UI"
 // Sidebar width
 export const drawerWidth = 240;
+// Button grid size
+export const gridSize = {
+    xs: 4,
+    md: 3,
+}
 ```
 
 2. Build app
