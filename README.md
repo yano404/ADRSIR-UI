@@ -8,22 +8,23 @@ User Interface for the [ADRSIR-API](https://gitlab.com/yano404/adrsir-api).
 ### Simplest way
 1. Edit config files (`src/config/apiconfig.js` and `src/config/uiconfig.js`)
 ```js
-/*
-    src/config/apiconfig.js
-*/
+/* src/config/apiconfig.js */
 // API URL
 // Change API_URL to your environment.
 export const API_URL = "http://raspberrypi.local:8000"
 ```
 ```js
-/*
-    src/config/uiconfig.js
-*/
+/* src/config/uiconfig.js */
 // Site title
 // You can chenge the site title.
 export const siteTitle = "ADRSIR-UI"
 // Sidebar width
 export const drawerWidth = 240;
+// Button grid size
+export const gridSize = {
+    xs: 4,
+    md: 3,
+}
 ```
 
 2. Run the app with npm
@@ -59,7 +60,7 @@ $ npm run build
 
 3. Edit `adrsir-ui.conf` to suite your environments.
 It will be necessary to change `server_name` and `root`.
-```
+```nginx
 # This is the Nginx configulation file
 # Place this file /etc/nginx/conf.d
 server {
